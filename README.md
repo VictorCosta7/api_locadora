@@ -1,4 +1,7 @@
-na pasta do projeto
-git add .
-git commit -m "escreve a mensagem aqui"
-git push -u origin main => main eh o nome da branch
+# Awesome Project Build with TypeORM
+
+Steps to run this project:
+
+1. Run `npm i` command
+2. Setup database settings inside `data-source.ts` file
+3. Run `npm start` command
