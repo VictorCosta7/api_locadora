@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.0",
   "info": {
-    "title": "RentalX Documentation",
-    "description": "This is API Rent",
+    "title": "Locars Documentation",
+    "description": "This is an API Rent",
     "version": "1.0.0",
     "contact": {
       "email": "engvictorcosta10@gmail.com"
@@ -28,8 +28,8 @@
                   }
                 },
                 "example": {
-                  "name": "Fusca",
-                  "description": "Carro velho"
+                  "name": "category name sample",
+                  "description": "Category description sample"
                 }
               }
             }
@@ -37,16 +37,16 @@
         },
         "responses": {
           "201": {
-            "description": "created"
+            "description": "Created"
           },
           "500": {
-            "description": "Category allredy exists!"
+            "description": "Category already exists"
           }
         }
       },
       "get": {
         "tags": ["Category"],
-        "summary": "List categories",
+        "summary": "List all categories",
         "description": "List all categories",
         "responses": {
           "200": {

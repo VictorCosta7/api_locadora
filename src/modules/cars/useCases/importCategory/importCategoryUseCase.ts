@@ -1,6 +1,8 @@
-import fs from "fs";
 import { parse as csvParse } from "csv-parse";
+import fs from "fs";
+import { parse } from "uuid";
 import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
+import { Category } from "../../entities/Category";
 
 interface IImportCategory {
   name: string;
@@ -8,27 +10,28 @@ interface IImportCategory {
 }
 
 class ImportCategoryUseCase {
-  constructor(private categoryRepository: ICategoriesRepository) {}
+  constructor(private categoriesRipository: ICategoriesRepository) {}
 
   loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
     return new Promise((resolve, reject) => {
-      const stream = fs.createReadStream(file.path);
+      const strem = fs.createReadStream(file.path);
 
       const categories: IImportCategory[] = [];
 
       const parseFile = csvParse();
 
-      stream.pipe(parseFile);
+      strem.pipe(parseFile);
 
       parseFile
         .on("data", async (line) => {
           const [name, description] = line;
-          categories.push({ name, description });
+          categories.push({
+            name,
+            description,
+          });
         })
         .on("end", () => {
-          fs.promises.unlink(file.path);
           resolve(categories);
-          console.log(categories);
         })
         .on("error", (err) => {
           reject(err);
@@ -42,12 +45,17 @@ class ImportCategoryUseCase {
     categories.map(async (category) => {
       const { name, description } = category;
 
-      const existCategory = this.categoryRepository.findByName(name);
+      const categoryExists = this.categoriesRipository.findByName(name);
 
-      if (!existCategory) {
-        this.categoryRepository.create({ name, description });
+      if (!categoryExists) {
+        this.categoriesRipository.create({
+          name,
+          description,
+        });
       }
     });
+
+    console.log(categories);
   }
 }
 

@@ -1,15 +1,10 @@
-import { Category } from "../../model/Category";
+import { Category } from "../../entities/Category";
 import { ICategoriesRepository } from "../ICategoriesRepository";
+import { prismaClient } from "../../../../database";
+import { Categories } from "@prisma/client";
 
 class CategoriesRepository implements ICategoriesRepository {
-  private categories: Category[];
-
-  //Singleton (instanciando banco de dados fake, para ser utilizado em qualquer lugar)
   private static INSTANCE: CategoriesRepository;
-
-  private constructor() {
-    this.categories = [];
-  }
 
   public static getInstance(): CategoriesRepository {
     if (!CategoriesRepository.INSTANCE) {
@@ -18,24 +13,31 @@ class CategoriesRepository implements ICategoriesRepository {
     return CategoriesRepository.INSTANCE;
   }
 
-  create({ name, description }): void {
-    const category = new Category();
+  async create({ name, description }): Promise<void> {
+    await prismaClient.categories.create({
+      data: {
+        name,
+        description,
+      },
+    });
+  }
 
-    Object.assign(category, {
-      name,
-      description,
-      created_at: new Date(),
+  async list(): Promise<Categories[]> {
+    const all = await prismaClient.categories.findMany();
+
+    return all;
+  }
+
+  async findByName(name: string): Promise<Categories> {
+    const category = await prismaClient.categories.findUnique({
+      where: {
+        name,
+      },
     });
 
-    this.categories.push(category);
-  }
-
-  list(): Category[] {
-    return this.categories;
-  }
-
-  findByName(name: string): Category {
-    const category = this.categories.find((category) => category.name === name);
+    if (category) {
+      throw new Error("Category alredi Exists!");
+    }
 
     return category;
   }
