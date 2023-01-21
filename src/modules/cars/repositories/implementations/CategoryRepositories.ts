@@ -4,15 +4,6 @@ import { prismaClient } from "../../../../database";
 import { Categories } from "@prisma/client";
 
 class CategoriesRepository implements ICategoriesRepository {
-  private static INSTANCE: CategoriesRepository;
-
-  public static getInstance(): CategoriesRepository {
-    if (!CategoriesRepository.INSTANCE) {
-      CategoriesRepository.INSTANCE = new CategoriesRepository();
-    }
-    return CategoriesRepository.INSTANCE;
-  }
-
   async create({ name, description }): Promise<void> {
     await prismaClient.categories.create({
       data: {
@@ -31,7 +22,7 @@ class CategoriesRepository implements ICategoriesRepository {
   async findByName(name: string): Promise<Categories> {
     const category = await prismaClient.categories.findUnique({
       where: {
-        name,
+        name: name,
       },
     });
 

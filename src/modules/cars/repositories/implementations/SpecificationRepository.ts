@@ -4,44 +4,36 @@ import {
   ICreateSpecificationDTO,
   ISpesificationRepository,
 } from "../ISpecificationRepository";
+import { prismaClient } from "../../../../database";
 
 class SpecificationRepository implements ISpesificationRepository {
-  private specifications: Specification[];
-
-  private static INSTANCE: SpecificationRepository;
-
-  private constructor() {
-    this.specifications = [];
+  async create({ name, description }: ICreateSpecificationDTO): Promise<void> {
+    await prismaClient.specification.create({
+      data: {
+        name,
+        description,
+      },
+    });
   }
 
-  public static getInstance(): SpecificationRepository {
-    if (!SpecificationRepository.INSTANCE) {
-      SpecificationRepository.INSTANCE = new SpecificationRepository();
-    }
-    return SpecificationRepository.INSTANCE;
-  }
-
-  create({ name, description }: ICreateSpecificationDTO): void {
-    const specification = new Specification();
-
-    Object.assign(specification, {
-      name,
-      description,
+  async findByName(name: string): Promise<Specification> {
+    const specification = await prismaClient.specification.findFirst({
+      where: {
+        name,
+      },
     });
 
-    this.specifications.push(specification);
-  }
-
-  findByName(name: string): Specification {
-    const specification = this.specifications.find(
-      (specification) => specification.name === name
-    );
+    if (specification) {
+      throw new Error("Specifications alredy exists!");
+    }
 
     return specification;
   }
 
-  list(): Specification[] {
-    return this.specifications;
+  async list(): Promise<Specification[]> {
+    const all = await prismaClient.specification.findMany();
+
+    return all;
   }
 }
 

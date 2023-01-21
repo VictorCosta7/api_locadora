@@ -2,7 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native"]
 }
 
 datasource db {
@@ -22,7 +23,7 @@ model Categories {
 model Specification {
   id          String @id @default(uuid())
   name        String
-  descriptin  String
+  description  String
   created_at  DateTime @default(now())
 
   @@map("specification")
