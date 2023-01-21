@@ -20,9 +20,9 @@ class CategoriesRepository implements ICategoriesRepository {
   }
 
   async findByName(name: string): Promise<Categories> {
-    const category = await prismaClient.categories.findUnique({
+    const category = await prismaClient.categories.findFirst({
       where: {
-        name: name,
+        name,
       },
     });
 
