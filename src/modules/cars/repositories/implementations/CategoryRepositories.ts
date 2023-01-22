@@ -1,7 +1,7 @@
-import { Category } from "../../entities/Category";
-import { ICategoriesRepository } from "../ICategoriesRepository";
-import { prismaClient } from "../../../../database";
 import { Categories } from "@prisma/client";
+
+import { prismaClient } from '../../../../database';
+import { ICategoriesRepository } from '../ICategoriesRepository';
 
 class CategoriesRepository implements ICategoriesRepository {
   async create({ name, description }): Promise<void> {
@@ -25,10 +25,6 @@ class CategoriesRepository implements ICategoriesRepository {
         name,
       },
     });
-
-    if (category) {
-      throw new Error("Category alredi Exists!");
-    }
 
     return category;
   }

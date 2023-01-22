@@ -1,8 +1,7 @@
-import { parse as csvParse } from "csv-parse";
-import fs from "fs";
-import { parse } from "uuid";
-import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
-import { Category } from "../../entities/Category";
+import { parse as csvParse } from 'csv-parse';
+import fs from 'fs';
+
+import { ICategoriesRepository } from '../../repositories/ICategoriesRepository';
 
 interface IImportCategory {
   name: string;
@@ -12,7 +11,7 @@ interface IImportCategory {
 class ImportCategoryUseCase {
   constructor(private categoriesRipository: ICategoriesRepository) {}
 
-  loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
+  async loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
     return new Promise((resolve, reject) => {
       const strem = fs.createReadStream(file.path);
 
@@ -23,39 +22,43 @@ class ImportCategoryUseCase {
       strem.pipe(parseFile);
 
       parseFile
-        .on("data", async (line) => {
+        .on('data', async (line) => {
           const [name, description] = line;
           categories.push({
             name,
             description,
           });
         })
-        .on("end", () => {
+        .on('end', () => {
           resolve(categories);
         })
-        .on("error", (err) => {
+        .on('error', (err) => {
           reject(err);
         });
     });
   }
 
-  async execute(file: Express.Multer.File): Promise<void> {
+  async execute(file: Express.Multer.File): Promise<string[]> {
     const categories = await this.loadCategories(file);
 
-    categories.map(async (category) => {
-      const { name, description } = category;
+    const alreadyExists: string[] = [];
+    for await (const { name, description } of categories) {
+      const category = await this.categoriesRipository.findByName(name);
 
-      const categoryExists = this.categoriesRipository.findByName(name);
-
-      if (!categoryExists) {
-        this.categoriesRipository.create({
-          name,
-          description,
-        });
+      if (category) {
+        alreadyExists.push(category.name);
+        // eslint-disable-next-line no-continue
+        continue;
       }
-    });
 
-    console.log(categories);
+      this.categoriesRipository.create({
+        name,
+        description,
+      });
+    }
+
+    // eslint-disable-next-line consistent-return
+    return alreadyExists;
   }
 }
 
