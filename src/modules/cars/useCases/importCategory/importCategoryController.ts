@@ -1,15 +1,20 @@
 import { Request, Response } from "express-serve-static-core";
+
 import { ImportCategoryUseCase } from "./importCategoryUseCase";
 
 class ImportCategoryController {
   constructor(private importCategoryUseCase: ImportCategoryUseCase) {}
 
-  handle(request: Request, response: Response) {
+  async handle(request: Request, response: Response) {
     const { file } = request;
 
-    this.importCategoryUseCase.execute(file);
+    try {
+      const alreadyExistent = await this.importCategoryUseCase.execute(file);
 
-    return response.send();
+      return response.send({ alreadyExistent });
+    } catch (error) {
+      return response.status(400).send({ error: error.message });
+    }
   }
 }
 

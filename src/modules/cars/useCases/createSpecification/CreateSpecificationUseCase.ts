@@ -1,4 +1,4 @@
-import { ISpesificationRepository } from "../../repositories/ISpecificationRepository";
+import { ISpesificationRepository } from '../../repositories/ISpecificationRepository';
 
 interface IRequest {
   name: string;
@@ -8,15 +8,15 @@ interface IRequest {
 class CreateSpecificationUseCase {
   constructor(private specificationRepository: ISpesificationRepository) {}
 
-  execute({ name, description }: IRequest): void {
+  async execute({ name, description }: IRequest): Promise<void> {
     const specificationAlredyExists =
-      this.specificationRepository.findByName(name);
+      await this.specificationRepository.findByName(name);
 
     if (specificationAlredyExists) {
-      throw new Error("Specification alredy exists!");
+      throw new Error('Specification alredy exists!');
     }
 
-    this.specificationRepository.create({ name, description });
+    await this.specificationRepository.create({ name, description });
   }
 }
 
