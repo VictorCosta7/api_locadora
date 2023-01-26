@@ -1,15 +1,16 @@
 import { Request, Response } from "express-serve-static-core";
 
 import { ImportCategoryUseCase } from "./importCategoryUseCase";
+import { container } from "tsyringe";
 
 class ImportCategoryController {
-  constructor(private importCategoryUseCase: ImportCategoryUseCase) {}
-
   async handle(request: Request, response: Response) {
     const { file } = request;
 
+    const importCategoryUseCase = container.resolve(ImportCategoryUseCase);
+
     try {
-      const alreadyExistent = await this.importCategoryUseCase.execute(file);
+      const alreadyExistent = await importCategoryUseCase.execute(file);
 
       return response.send({ alreadyExistent });
     } catch (error) {

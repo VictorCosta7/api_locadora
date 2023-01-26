@@ -15,7 +15,7 @@ services:
   app:
     build: .
     ports:
-      - 8000:3333
+      - 3333:3333
     volumes:
       - .:/usr/app
 volumes:

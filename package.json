@@ -1,10 +1,9 @@
 {
-  "name": "rentx",
+  "name": "locars",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
   "scripts": {
-    "predev": "prisma migrate dev",
     "dev": "ts-node-dev --respawn --exit-child src/server.ts"
   },
   "devDependencies": {
@@ -36,6 +35,7 @@
     "pg": "^8.8.0",
     "reflect-metadata": "^0.1.13",
     "swagger-ui-express": "^4.6.0",
+    "tsyringe": "^4.7.0",
     "uuid": "^8.3.2"
   }
 }

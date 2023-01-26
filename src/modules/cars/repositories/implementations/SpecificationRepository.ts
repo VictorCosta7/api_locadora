@@ -1,4 +1,3 @@
-import { request } from "express";
 import { Specification } from "../../entities/Specification";
 import {
   ICreateSpecificationDTO,
@@ -22,10 +21,6 @@ class SpecificationRepository implements ISpesificationRepository {
         name,
       },
     });
-
-    if (specification) {
-      throw new Error("Specifications alredy exists!");
-    }
 
     return specification;
   }
