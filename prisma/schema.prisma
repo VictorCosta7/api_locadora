@@ -35,7 +35,7 @@ model Users {
   username       String   @unique
   password       String
   email          String   @unique
-  driver_license Boolean
+  driver_license String
   isAdmin        Boolean  @default(false)
   created_at     DateTime @default(now())
 

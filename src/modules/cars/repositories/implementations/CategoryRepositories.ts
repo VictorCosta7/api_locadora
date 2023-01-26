@@ -1,7 +1,8 @@
 import { Categories } from "@prisma/client";
 
-import { prismaClient } from '../../../../database';
-import { ICategoriesRepository } from '../ICategoriesRepository';
+import { prismaClient } from "../../../../database";
+
+import { ICategoriesRepository } from "../ICategoriesRepository";
 
 class CategoriesRepository implements ICategoriesRepository {
   async create({ name, description }): Promise<void> {
@@ -13,12 +14,6 @@ class CategoriesRepository implements ICategoriesRepository {
     });
   }
 
-  async list(): Promise<Categories[]> {
-    const all = await prismaClient.categories.findMany();
-
-    return all;
-  }
-
   async findByName(name: string): Promise<Categories> {
     const category = await prismaClient.categories.findFirst({
       where: {
@@ -27,6 +22,12 @@ class CategoriesRepository implements ICategoriesRepository {
     });
 
     return category;
+  }
+
+  async list(): Promise<Categories[]> {
+    const all = await prismaClient.categories.findMany();
+
+    return all;
   }
 }
 
