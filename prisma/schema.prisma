@@ -32,7 +32,6 @@ model Specification {
 model Users {
   id             String   @id @default(uuid())
   name           String
-  username       String   @unique
   password       String
   email          String   @unique
   driver_license String

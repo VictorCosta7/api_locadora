@@ -9,7 +9,6 @@ import { Users } from "@prisma/client";
 class UsersRepository implements IUsersRepository {
   async create({
     name,
-    username,
     password,
     email,
     driver_license,
@@ -17,7 +16,6 @@ class UsersRepository implements IUsersRepository {
     await prismaClient.users.create({
       data: {
         name,
-        username,
         password,
         email,
         driver_license,
@@ -33,6 +31,26 @@ class UsersRepository implements IUsersRepository {
     });
 
     return user;
+  }
+
+  async findByEmail(email: string): Promise<Users> {
+    const user = await prismaClient.users.findUnique({
+      where: {
+        email,
+      },
+    });
+
+    return user;
+  }
+
+  async verrifyPassword(password: string): Promise<Users> {
+    const passwordMatch = await prismaClient.users.findFirst({
+      where: {
+        password,
+      },
+    });
+
+    return passwordMatch;
   }
 }
 
