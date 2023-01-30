@@ -1,35 +1,57 @@
 import { inject, injectable } from "tsyringe";
-import { sign } from "jsonwebtoken";
-import { prisma } from "@prisma/client";
+import { compare } from "bcrypt";
 
 import { UsersRepository } from "../../repositories/implementations/UsersRepository";
-import { usersRoutes } from "../../../../routes/users.routes";
+import { sign } from "jsonwebtoken";
+import { AppError } from "../../../../errors/AppError";
 
 interface Irequest {
   email: string;
   password: string;
-  id: string;
+}
+
+interface Iresponse {
+  user: {
+    name: string;
+    email: string;
+  };
+  token: string;
 }
 
 @injectable()
 class AuthenticateUserUseCase {
   constructor(
-    @inject("UserRepository")
+    @inject("UsersRepository")
     private authenticateRepository: UsersRepository
   ) {}
 
-  execute({ email, password, id }: Irequest) {
-    const user = this.authenticateRepository.findByEmail(email);
+  async execute({ email, password }: Irequest): Promise<Iresponse> {
+    const user = await this.authenticateRepository.findByEmail(email);
 
     if (!user) {
-      throw new Error("Email or password incorrect!");
+      throw new AppError("Email or password incorrect!");
     }
 
-    const passwordMatch = this.authenticateRepository.verrifyPassword(password);
+    const passwordMatch = await compare(password, user.password);
 
     if (!passwordMatch) {
-      throw new Error("Email or password incorrect!");
+      throw new AppError("Email or password incorrect!");
     }
+
+    const token = sign({}, "eeb7c4b019492d5c74406648e0f849e6", {
+      subject: user.id,
+      expiresIn: "1d",
+    });
+
+    const tokenReturn: Iresponse = {
+      token,
+      user: {
+        name: user.name,
+        email: user.email,
+      },
+    };
+
+    return tokenReturn;
   }
 }
 

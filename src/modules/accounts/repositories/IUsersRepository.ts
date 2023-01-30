@@ -5,7 +5,8 @@ interface IUsersRepository {
   create(data: ICreateUserDTO): Promise<void>;
   findByName(name: string): Promise<Users>;
   findByEmail(email: string): Promise<Users>;
-  verrifyPassword(password: string): Promise<Users>;
+  verrifyPassword(password: string): Promise<Users[]>;
+  findById(id: string): Promise<Users>;
 }
 
 export { IUsersRepository };

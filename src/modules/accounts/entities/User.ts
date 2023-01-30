@@ -6,12 +6,16 @@ class User {
   password: string;
   email: string;
   driver_license: string;
+  avatar?: string;
   idAdmin: boolean;
   created_at: Date;
 
   constructor() {
     if (!this.id) {
       this.id = uuidv4();
+    }
+    if (!this.avatar) {
+      this.avatar = null;
     }
   }
 }

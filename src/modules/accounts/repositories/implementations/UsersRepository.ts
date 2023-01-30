@@ -5,6 +5,7 @@ import { ICreateUserDTO } from "../../dtos/ICreateUsersDTO";
 import { prismaClient } from "../../../../database";
 
 import { Users } from "@prisma/client";
+import { User } from "../../entities/User";
 
 class UsersRepository implements IUsersRepository {
   async create({
@@ -30,6 +31,7 @@ class UsersRepository implements IUsersRepository {
       },
     });
 
+    console.log(user);
     return user;
   }
 
@@ -43,14 +45,24 @@ class UsersRepository implements IUsersRepository {
     return user;
   }
 
-  async verrifyPassword(password: string): Promise<Users> {
-    const passwordMatch = await prismaClient.users.findFirst({
+  async verrifyPassword(password: string): Promise<Users[]> {
+    const passwords = await prismaClient.users.findMany({
       where: {
         password,
       },
     });
 
-    return passwordMatch;
+    return passwords;
+  }
+
+  async findById(id: string): Promise<Users> {
+    const user = await prismaClient.users.findFirst({
+      where: {
+        id,
+      },
+    });
+
+    return user;
   }
 }
 
