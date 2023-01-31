@@ -1,11 +1,8 @@
-import { IUsersRepository } from "../IUsersRepository";
-
-import { ICreateUserDTO } from "../../dtos/ICreateUsersDTO";
-
 import { prismaClient } from "../../../../database";
-
 import { Users } from "@prisma/client";
-import { User } from "../../entities/User";
+
+import { IUsersRepository } from "../IUsersRepository";
+import { ICreateUserDTO } from "../../dtos/ICreateUsersDTO";
 
 class UsersRepository implements IUsersRepository {
   async create({
@@ -13,6 +10,8 @@ class UsersRepository implements IUsersRepository {
     password,
     email,
     driver_license,
+    avatar,
+    id,
   }: ICreateUserDTO): Promise<void> {
     await prismaClient.users.create({
       data: {
@@ -20,6 +19,8 @@ class UsersRepository implements IUsersRepository {
         password,
         email,
         driver_license,
+        avatar,
+        id,
       },
     });
   }

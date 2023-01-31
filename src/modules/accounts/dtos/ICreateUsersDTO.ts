@@ -2,8 +2,14 @@ interface ICreateUserDTO {
   name: string;
   password: string;
   email: string;
-  avatar?: string;
   driver_license: string;
+  id?: string;
+  avatar?: string;
+}
+
+interface IUpdateAvatarDTO {
+  id: string;
+  avatar: string;
 }
 
 export { ICreateUserDTO };

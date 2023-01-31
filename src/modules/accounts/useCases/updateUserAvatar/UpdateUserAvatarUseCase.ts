@@ -1,6 +1,5 @@
 import { inject, injectable } from "tsyringe";
 import { IUsersRepository } from "../../repositories/IUsersRepository";
-import { prismaClient } from "../../../../database";
 
 interface Irequest {
   user_id: string;
@@ -8,7 +7,7 @@ interface Irequest {
 }
 
 @injectable()
-class updateAvatarUseCase {
+class UpdateAvatarUseCase {
   constructor(
     @inject("UsersRepository")
     private usersRepository: IUsersRepository
@@ -19,8 +18,10 @@ class updateAvatarUseCase {
 
     user.avatar = avatar_file;
 
+    console.log(avatar_file);
+
     await this.usersRepository.create(user);
   }
 }
 
-export { updateAvatarUseCase };
+export { UpdateAvatarUseCase };
