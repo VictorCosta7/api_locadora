@@ -5,6 +5,17 @@ import { IUsersRepository } from "../IUsersRepository";
 import { ICreateUserDTO } from "../../dtos/ICreateUsersDTO";
 
 class UsersRepository implements IUsersRepository {
+  async updateAvatar(id: string, avatar: string): Promise<void> {
+    await prismaClient.users.update({
+      where: {
+        id,
+      },
+      data: {
+        avatar,
+      },
+    });
+  }
+
   async create({
     name,
     password,
@@ -32,7 +43,6 @@ class UsersRepository implements IUsersRepository {
       },
     });
 
-    console.log(user);
     return user;
   }
 

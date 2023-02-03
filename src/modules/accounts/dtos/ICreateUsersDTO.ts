@@ -7,9 +7,4 @@ interface ICreateUserDTO {
   avatar?: string;
 }
 
-interface IUpdateAvatarDTO {
-  id: string;
-  avatar: string;
-}
-
 export { ICreateUserDTO };
