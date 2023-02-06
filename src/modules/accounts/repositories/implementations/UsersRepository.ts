@@ -1,8 +1,8 @@
-import { prismaClient } from "../../../../database";
+import { prismaClient } from "database";
 import { Users } from "@prisma/client";
 
 import { IUsersRepository } from "../IUsersRepository";
-import { ICreateUserDTO } from "../../dtos/ICreateUsersDTO";
+import { ICreateUserDTO } from "modules/accounts/dtos/ICreateUsersDTO";
 
 class UsersRepository implements IUsersRepository {
   async updateAvatar(id: string, avatar: string): Promise<void> {
