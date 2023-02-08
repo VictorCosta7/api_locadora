@@ -1,9 +1,9 @@
 import { inject, injectable } from "tsyringe";
 import { compare } from "bcrypt";
 
-import { UsersRepository } from "modules/accounts/repositories/implementations/UsersRepository";
+import { UsersRepository } from "modules/accounts/infra/prisma/repositories/UsersRepository";
 import { sign } from "jsonwebtoken";
-import { AppError } from "errors/AppError";
+import { AppError } from "shared/errors/AppError";
 
 interface Irequest {
   email: string;

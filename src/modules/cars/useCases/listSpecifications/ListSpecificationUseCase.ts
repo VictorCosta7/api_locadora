@@ -1,6 +1,6 @@
 import { inject, injectable } from "tsyringe";
 
-import { Specification } from "modules/cars/entities/Specification";
+import { Specification } from "modules/cars/infra/prisma/entities/Specification";
 import { ISpesificationRepository } from "modules/cars/repositories/ISpecificationRepository";
 
 @injectable()
