@@ -30,6 +30,16 @@ class SpecificationRepository implements ISpesificationRepository {
 
     return all;
   }
+
+  async findByIds(id: string): Promise<Specification[]> {
+    const all = await prismaClient.specification.findMany({
+      where: {
+        id,
+      },
+    });
+
+    return all;
+  }
 }
 
 export { SpecificationRepository };

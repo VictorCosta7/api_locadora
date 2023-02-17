@@ -2,6 +2,16 @@ import { inject, injectable } from "tsyringe";
 import { ICarsRepository } from "../../repositories/ICarsRepisitory";
 import { AppError } from "shared/errors/AppError";
 
+interface IRequest {
+  name: string;
+  description: string;
+  license_plate: string;
+  fine_amount: number;
+  brand: string;
+  id_category: string;
+  daily_rate: number;
+}
+
 @injectable()
 class CreateCarUseCase {
   constructor(
@@ -17,7 +27,7 @@ class CreateCarUseCase {
     brand,
     id_category,
     daily_rate,
-  }) {
+  }: IRequest): Promise<void> {
     const plateCarAlredyExists = await this.carsRepository.findByPlate(
       license_plate
     );
@@ -34,6 +44,7 @@ class CreateCarUseCase {
       fine_amount,
       brand,
       id_category,
+      specifications: [],
     });
   }
 }

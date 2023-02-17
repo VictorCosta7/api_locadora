@@ -1,3 +1,5 @@
+import { Specification } from "../infra/prisma/entities/Specification";
+
 interface ICreateCarDTO {
   name: string;
 
@@ -12,6 +14,8 @@ interface ICreateCarDTO {
   brand: string;
 
   id_category: string;
+
+  specifications: Specification[];
 }
 
 export { ICreateCarDTO };
