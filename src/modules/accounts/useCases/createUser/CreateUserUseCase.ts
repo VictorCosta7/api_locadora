@@ -23,6 +23,10 @@ class CreateUserUseCase {
       throw new AppError("User alredy exists!");
     }
 
+    if (!password) {
+      throw new AppError("Password is required!");
+    }
+
     const passwordHash = await hash(password, 8);
 
     this.userRepository.create({
