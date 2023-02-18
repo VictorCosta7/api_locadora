@@ -1,8 +1,8 @@
-import { ICreateCarDTO } from "modules/cars/dtos/ICreateCarDTO";
-import { ICarsRepository } from "modules/cars/repositories/ICarsRepisitory";
-import { prismaClient } from "shared/infra/prismaORM";
-import { Car } from "../prisma/entities/Car";
-import { Cars } from ".prisma/client";
+import { ICreateCarDTO } from 'modules/cars/dtos/ICreateCarDTO';
+import { ICarsRepository } from 'modules/cars/repositories/ICarsRepisitory';
+import { prismaClient } from 'shared/infra/prismaORM';
+
+import { Cars } from '.prisma/client';
 
 class CarsRepository implements ICarsRepository {
   async create({
@@ -41,22 +41,31 @@ class CarsRepository implements ICarsRepository {
     brand: string,
     name: string
   ): Promise<Cars[]> {
-    const all = await prismaClient.cars.findMany({
-      where: {
-        available: true,
-      },
-    });
+    const where: Record<string, unknown> = {
+      available: true,
+    };
 
     if (name) {
-      const cars = all.filter((car) => car.name === name);
-      return cars;
-    } else if (brand) {
-      const cars = all.filter((car) => car.brand === brand);
-      return cars;
-    } else if (id_category) {
-      const cars = all.filter((car) => car.id_category === id_category);
-      return cars;
+      where.name = {
+        contains: name,
+        mode: 'insensitive',
+      };
     }
+
+    if (brand) {
+      where.brand = {
+        contains: brand,
+        mode: 'insensitive',
+      };
+    }
+
+    if (id_category) {
+      where.id_category = id_category;
+    }
+
+    const all = await prismaClient.cars.findMany({
+      where,
+    });
 
     return all;
   }

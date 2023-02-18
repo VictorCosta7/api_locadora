@@ -7,7 +7,7 @@
     "seed": "ts-node-dev prisma/seed.ts"
   },
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register --inspect --transpile-only --ignore-watch node_modules --respawn src/shared/infra/http/server.ts",
+    "dev": "ts-node-dev -r tsconfig-paths/register src/shared/infra/http/server.ts",
     "test": "jest"
   },
   "devDependencies": {
